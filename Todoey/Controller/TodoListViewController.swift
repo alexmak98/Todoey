@@ -132,45 +132,34 @@ extension TodoListViewController : UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-//        search(searchBar.text!) - addition
+        search(searchBar.text!)
         
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
-        
-        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
-        
-        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-        
-        loadItems(with: request)
-        
-//        DispatchQueue.main.async {
-//            searchBar.resignFirstResponder() - add
-//        }
+        DispatchQueue.main.async {
+            searchBar.resignFirstResponder()
+        }
         
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if (searchBar.text?.count == 0) {
-            loadItems()
             
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-        } //else {
-//            search(searchBar.text!) - add
-//        }
-        
+            loadItems()
+        } else {
+            search(searchBar.text!)
+        }
+    
     }
     
-//    func search(_ string: String) {
-//
-//        let request : NSFetchRequest<Item> = Item.fetchRequest()
-//
-//        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", string)
-//
-//        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
-//
-//        loadItems(with: request)
-//    }
+    func search(_ string: String) {
+
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+
+        let predicate = NSPredicate(format: "title CONTAINS[cd] %@", string)
+
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+
+        loadItems(with: request, predicate: predicate)
+    }
     
 }
 
